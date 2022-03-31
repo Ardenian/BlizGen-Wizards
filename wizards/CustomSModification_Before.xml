@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <fieldVal path="CBehaviorBuff_MaxStackCount">
+    <value category="FieldType">Stats</value>
+  </fieldVal>
+  <fieldVal path="CBehaviorBuff_Modification" sort="1">
+    <value category="FieldType">Behavior</value>
+  </fieldVal>
+  <fieldVal path="CBehaviorBuff_Modification_AccelerationBonus">
+    <value category="FieldType">Movement</value>
+  </fieldVal>
+</root>

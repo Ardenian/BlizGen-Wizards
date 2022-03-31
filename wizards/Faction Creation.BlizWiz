@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wizardfile>
+  <wizard id = "CreateFaction">
+    <name>Faction</name>
+    <description>Creates a faction for a Tower Defense game</description>
+    <objecttypes create = "Actor;Weapon;Unit;Model;Effect;Sound"/>
+    <category>Create</category>
+
+    <!-- Input -->
+    <input id = "FactionName" type = "CString">
+      <name>Faction Name</name>
+      <tooltip>Name of the faction</tooltip>
+    </input>
+
+    <input id = "FactionImagePath" type = "CImagePath">
+      <name>Faction Image</name>
+      <tooltip>Image of the faction</tooltip>
+    </input>
+
+    <input id = "FactionDescription" type = "CStringLink">
+      <name>Faction Description</name>
+      <tooltip>Description of the faction</tooltip>
+    </input>
+
+    <input id = "FactionTier1" type = "Wizard:CreateTierUnits">
+      <name>Faction Tier</name>
+      <tooltip>Tier 1 units of the faction</tooltip>
+      <layout page="2"/>
+    </input>
+    <input id = "FactionTier2" type = "Wizard:CreateTierUnits">
+      <name>Faction Tier</name>
+      <tooltip>Tier 2 units of the faction</tooltip>
+      <layout page="3"/>
+    </input>
+    <input id = "FactionTier3" type = "Wizard:CreateTierUnits">
+      <name>Faction Tier</name>
+      <tooltip>Tier 3 units of the faction</tooltip>
+      <layout page="4"/>
+    </input>
+  </wizard>
+
+  <wizard id = "CreateTierUnits">
+    <name>Tier Units</name>
+    <description>Creates units for a tier</description>
+    <objecttypes create = "Actor;Weapon;Unit;Model;Effect;Sound"/>
+    <category>Create</category>
+
+    <input id = "FactionTierUnit1" type = "Wizard:CreateTierUnit">
+      <name>Tier Unit 1</name>
+    </input>
+    <input id = "FactionTierUnit2" type = "Wizard:CreateTierUnit">
+      <name>Tier Unit 2</name>
+    </input>
+    <input id = "FactionTierUnit3" type = "Wizard:CreateTierUnit">
+      <name>Tier Unit 3</name>
+    </input>
+    <input id = "FactionTierUnit4" type = "Wizard:CreateTierUnit">
+      <name>Tier Unit 4</name>
+    </input>
+    <input id = "FactionTierUnit5" type = "Wizard:CreateTierUnit">
+      <name>Tier Unit 5</name>
+    </input>
+  </wizard>
+
+  <wizard id = "CreateTierUnit">
+    <name>Tier Unit</name>
+    <description>Creates a unit for a tier</description>
+    <objecttypes create = "Actor;Weapon;Unit;Model;Effect;Sound"/>
+    <category>Create</category>
+
+    <!-- Input -->
+
+    <input id = "OriginalUnit" type = "CUnitLink">
+      <name>Original Unit</name>
+      <description>This is the unit that the new unit will be based on</description>
+    </input>
+
+    <!-- Entries -->
+
+    <entry catalog = "Unit" type = "CUnit">
+      <parentid>^OriginalUnit^</parentid>
+      <id>gen_^CreateFaction:FactionName^_^OriginalUnit^</id>
+
+      <field id = "Name">
+        <value>^OriginalUnit^</value>
+      </field>
+
+      <!--reset unit attributes-->
+      <field id="Attributes">
+        <count>13</count>
+        <value>0</value>
+      </field>
+      <!--make it a structure-->
+      <field id="Attributes">
+        <index>Structure</index>
+        <value>1</value>
+      </field>
+
+      <!--units don't get experience this way-->
+      <field id="DamageDealtXP">
+        <value>0</value>
+      </field>
+      <field id="DamageTakenXP">
+        <value>0</value>
+      </field>
+
+      <field id="Speed">
+        <value>0</value>
+      </field>
+    </entry>
+
+  </wizard>
+
+</wizardfile>

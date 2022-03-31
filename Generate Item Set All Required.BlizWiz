@@ -1,0 +1,702 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wizardfile>
+  <wizard id = "ArdGenerateItemSetRequirement">
+    <name>Generate Item Set (All Items Required)</name>
+    <instructions >
+      An item set consists of multiple items. If a unit equips all items of a set, a bonus behavior is enabled.
+      
+      This wizard generates the related dummy behaviors and a validator for enabling/disabling the item set bonus behavior and modifies the existing items respectively. Supports an item set of up to eight items.
+      When enabling the modification of the item buttons, the wizard assumes that the item and the button share id. If you choose to use the behavior's face for item tooltips, make sure the behavior actually has a face.
+    </instructions >
+    <objecttypes create = "Behavior; Validator"/>
+    <category>Items</category>
+
+    <condition id="condition-behavior-selected" input="set-item-behavior" empty="0"/>
+
+    <condition id="condition-set-item-update-button-option" input="set-item-update-button-tooltip-option" value="1" operator="equal"/>
+    <condition id="condition-set-item-tooltip-use-behavior-face" input="set-item-tooltip-use-behavior-face-option" value="1" operator="equal"/>
+    <condition id="condition-set-item-tooltip-use-custom-tooltip" input="set-item-tooltip-use-behavior-face-option" value="1" operator="equal" logic="not"/>
+
+    <input id="set-item-id" type="CString">
+      <tooltip>This is the id of the item set.</tooltip>
+      <name>Item Set Id</name>
+      <simpletext/>
+    </input>
+    <input id="set-item-count" type="int16">
+      <tooltip>Amount of items that the item set consists of. Supports from two up to eight items.</tooltip>
+      <name>Item Count</name>
+      <minimum value="2"/>
+      <maximum value="8"/>
+    </input>
+
+    <input id="set-item-update-button-tooltip-option" type="WizardCheckbox">
+      <tooltip>Determinates if the buttons of your items in the set should be modified using the tooltip appender.</tooltip>
+      <name>Modify item button tooltips?</name>
+    </input>
+
+    <input id="set-item-tooltip-use-behavior-face-option" type="WizardCheckbox">
+      <tooltip>Should the face of the behavior that gets applied to the unit when the set is complete be used in the tooltip for each item.</tooltip>
+      <name>Append face of item set bonus to item button tooltip (Recommended)</name>
+      <condition id="condition-set-item-update-button-option"/>
+    </input>
+
+    <input id="set-item-display-name" type="CString">
+      <tooltip>This is the display name of the item.</tooltip>
+      <name>Item Set Display Name</name>
+      <condition id="condition-set-item-update-button-option"/>
+    </input>
+
+    <input id="set-item-tooltip" type="CStringLink">
+      <tooltip>This is the information about the set being displayed in item button tooltips.</tooltip>
+      <name>Item Set Display Information</name>
+      <condition logic="and">
+        <condition id="condition-set-item-update-button-option"/>
+        <condition id="condition-set-item-tooltip-use-custom-tooltip"/>
+      </condition>
+    </input>
+
+    <input id="set-item-behavior" type="CBehaviorLink">
+      <tooltip>This is the behavior that is enabled on the unit while the item set is complete.</tooltip>
+      <name>Item Set Bonus</name>
+      <layout page="2"/>
+    </input>
+
+    <!-- Input fields for the items. The amount depends on the selected set-item-count. -->
+    <input id="set-item0" type="CItemLink">
+      <name>Set Item 0</name>
+      <layout page="2"/>
+      <condition input="set-item-count" value ="1" operator="greaterequal"/>
+    </input>
+    <input id="set-item1" type="CItemLink">
+      <name>Set Item 1</name>
+      <layout page="2"/>
+      <condition input="set-item-count" value ="2" operator="greaterequal"/>
+    </input>
+    <input id="set-item2" type="CItemLink">
+      <name>Set Item 2</name>
+      <layout page="2"/>
+      <condition input="set-item-count" value ="3" operator="greaterequal"/>
+    </input>
+    <input id="set-item3" type="CItemLink">
+      <name>Set Item 3</name>
+      <layout page="2"/>
+      <condition input="set-item-count" value ="4" operator="greaterequal"/>
+    </input>
+    <input id="set-item4" type="CItemLink">
+      <name>Set Item 4</name>
+      <layout page="2"/>
+      <condition input="set-item-count" value ="5" operator="greaterequal"/>
+    </input>
+    <input id="set-item6" type="CItemLink">
+      <name>Set Item 5</name>
+
+      <layout page="2"/>
+      <condition input="set-item-count" value ="6" operator="greaterequal"/>
+    </input>
+    <input id="set-item6" type="CItemLink">
+      <name>Set Item 6</name>
+      <layout page="2"/>
+      <condition input="set-item-count" value ="7" operator="greaterequal"/>
+    </input>
+    <input id="set-item7" type="CItemLink">
+      <layout page="2"/>
+      <name>Set Item 7</name>
+      <condition input="set-item-count" value ="8" operator="greaterequal"/>
+    </input>
+
+    <!-- Check for duplicates, items being selected more than once for the set. -->
+    <validate type="error">
+      <condition logic="or">
+        <condition input="set-item0" empty="1"/>
+        <condition input="set-item1" empty="1"/>
+        <condition input="set-item0" value="^set-item1^" match="equal" logic="not"/>
+      </condition>
+      <text>Items with the same id (^set-item0^) detected, no duplicates are allowed.</text>
+    </validate>
+    <validate type="error">
+      <condition logic="or">
+        <condition input="set-item0" empty="1"/>
+        <condition input="set-item2" empty="1"/>
+        <condition input="set-item0" value="^set-item2^" match="equal" logic="not"/>
+      </condition>
+      <text>Items with the same id (^set-item0^) detected, no duplicates are allowed.</text>
+    </validate>
+    <validate type="error">
+      <condition logic="or">
+        <condition input="set-item0" empty="1"/>
+        <condition input="set-item3" empty="1"/>
+        <condition input="set-item0" value="^set-item3^" match="equal" logic="not"/>
+      </condition>
+      <text>Items with the same id (^set-item0^) detected, no duplicates are allowed.</text>
+    </validate>
+    <validate type="error">
+      <condition logic="or">
+        <condition input="set-item0" empty="1"/>
+        <condition input="set-item4" empty="1"/>
+        <condition input="set-item0" value="^set-item4^" match="equal" logic="not"/>
+      </condition>
+      <text>Items with the same id (^set-item0^) detected, no duplicates are allowed.</text>
+    </validate>
+    <validate type="error">
+      <condition logic="or">
+        <condition input="set-item0" empty="1"/>
+        <condition input="set-item6" empty="1"/>
+        <condition input="set-item0" value="^set-item6^" match="equal" logic="not"/>
+      </condition>
+      <text>Items with the same id (^set-item0^) detected, no duplicates are allowed.</text>
+    </validate>
+    <validate type="error">
+      <condition logic="or">
+        <condition input="set-item0" empty="1"/>
+        <condition input="set-item6" empty="1"/>
+        <condition input="set-item0" value="^set-item6^" match="equal" logic="not"/>
+      </condition>
+      <text>Items with the same id (^set-item0^) detected, no duplicates are allowed.</text>
+    </validate>
+    <validate type="error">
+      <condition logic="or">
+        <condition input="set-item0" empty="1"/>
+        <condition input="set-item7" empty="1"/>
+        <condition input="set-item0" value="^set-item7^" match="equal" logic="not"/>
+      </condition>
+      <text>You chose items with the same id (^set-item0^), no duplicates are allowed.</text>
+    </validate>
+
+    <validate type="error">
+      <condition logic="or">
+        <condition input="set-item1" empty="1"/>
+        <condition input="set-item2" empty="1"/>
+        <condition input="set-item1" value="^set-item2^" match="equal" logic="not"/>
+      </condition>
+      <text>Items with the same id (^set-item1^) detected, no duplicates are allowed.</text>
+    </validate>
+    <validate type="error">
+      <condition logic="or">
+        <condition input="set-item1" empty="1"/>
+        <condition input="set-item3" empty="1"/>
+        <condition input="set-item1" value="^set-item3^" match="equal" logic="not"/>
+      </condition>
+      <text>Items with the same id (^set-item1^) detected, no duplicates are allowed.</text>
+    </validate>
+    <validate type="error">
+      <condition logic="or">
+        <condition input="set-item1" empty="1"/>
+        <condition input="set-item4" empty="1"/>
+        <condition input="set-item1" value="^set-item4^" match="equal" logic="not"/>
+      </condition>
+      <text>Items with the same id (^set-item1^) detected, no duplicates are allowed.</text>
+    </validate>
+    <validate type="error">
+      <condition logic="or">
+        <condition input="set-item1" empty="1"/>
+        <condition input="set-item6" empty="1"/>
+        <condition input="set-item1" value="^set-item6^" match="equal" logic="not"/>
+      </condition>
+      <text>Items with the same id (^set-item1^) detected, no duplicates are allowed.</text>
+    </validate>
+    <validate type="error">
+      <condition logic="or">
+        <condition input="set-item1" empty="1"/>
+        <condition input="set-item6" empty="1"/>
+        <condition input="set-item1" value="^set-item6^" match="equal" logic="not"/>
+      </condition>
+      <text>Items with the same id (^set-item1^) detected, no duplicates are allowed.</text>
+    </validate>
+    <validate type="error">
+      <condition logic="or">
+        <condition input="set-item1" empty="1"/>
+        <condition input="set-item7" empty="1"/>
+        <condition input="set-item1" value="^set-item7^" match="equal" logic="not"/>
+      </condition>
+      <text>You chose items with the same id (^set-item1^), no duplicates are allowed.</text>
+    </validate>
+
+    <validate type="error">
+      <condition logic="or">
+        <condition input="set-item3" empty="1"/>
+        <condition input="set-item2" empty="1"/>
+        <condition input="set-item3" value="^set-item2^" match="equal" logic="not"/>
+      </condition>
+      <text>Items with the same id (^set-item3^) detected, no duplicates are allowed.</text>
+    </validate>
+    <validate type="error">
+      <condition logic="or">
+        <condition input="set-item3" empty="1"/>
+        <condition input="set-item4" empty="1"/>
+        <condition input="set-item3" value="^set-item4^" match="equal" logic="not"/>
+      </condition>
+      <text>Items with the same id (^set-item3^) detected, no duplicates are allowed.</text>
+    </validate>
+    <validate type="error">
+      <condition logic="or">
+        <condition input="set-item3" empty="1"/>
+        <condition input="set-item6" empty="1"/>
+        <condition input="set-item3" value="^set-item6^" match="equal" logic="not"/>
+      </condition>
+      <text>Items with the same id (^set-item3^) detected, no duplicates are allowed.</text>
+    </validate>
+    <validate type="error">
+      <condition logic="or">
+        <condition input="set-item3" empty="1"/>
+        <condition input="set-item6" empty="1"/>
+        <condition input="set-item3" value="^set-item6^" match="equal" logic="not"/>
+      </condition>
+      <text>Items with the same id (^set-item3^) detected, no duplicates are allowed.</text>
+    </validate>
+    <validate type="error">
+      <condition logic="or">
+        <condition input="set-item3" empty="1"/>
+        <condition input="set-item7" empty="1"/>
+        <condition input="set-item3" value="^set-item7^" match="equal" logic="not"/>
+      </condition>
+      <text>You chose items with the same id (^set-item3^), no duplicates are allowed.</text>
+    </validate>
+
+    <validate type="error">
+      <condition logic="or">
+        <condition input="set-item4" empty="1"/>
+        <condition input="set-item2" empty="1"/>
+        <condition input="set-item4" value="^set-item2^" match="equal" logic="not"/>
+      </condition>
+      <text>Items with the same id (^set-item4^) detected, no duplicates are allowed.</text>
+    </validate>
+    <validate type="error">
+      <condition logic="or">
+        <condition input="set-item4" empty="1"/>
+        <condition input="set-item6" empty="1"/>
+        <condition input="set-item4" value="^set-item6^" match="equal" logic="not"/>
+      </condition>
+      <text>Items with the same id (^set-item4^) detected, no duplicates are allowed.</text>
+    </validate>
+    <validate type="error">
+      <condition logic="or">
+        <condition input="set-item4" empty="1"/>
+        <condition input="set-item6" empty="1"/>
+        <condition input="set-item4" value="^set-item6^" match="equal" logic="not"/>
+      </condition>
+      <text>Items with the same id (^set-item4^) detected, no duplicates are allowed.</text>
+    </validate>
+    <validate type="error">
+      <condition logic="or">
+        <condition input="set-item4" empty="1"/>
+        <condition input="set-item7" empty="1"/>
+        <condition input="set-item4" value="^set-item7^" match="equal" logic="not"/>
+      </condition>
+      <text>You chose items with the same id (^set-item4^), no duplicates are allowed.</text>
+    </validate>
+
+    <validate type="error">
+      <condition logic="or">
+        <condition input="set-item6" empty="1"/>
+        <condition input="set-item2" empty="1"/>
+        <condition input="set-item6" value="^set-item2^" match="equal" logic="not"/>
+      </condition>
+      <text>You chose items with the same id (^set-item6^), no duplicates are allowed.</text>
+    </validate>
+    <validate type="error">
+      <condition logic="or">
+        <condition input="set-item6" empty="1"/>
+        <condition input="set-item6" empty="1"/>
+        <condition input="set-item6" value="^set-item6^" match="equal" logic="not"/>
+      </condition>
+      <text>You chose items with the same id (^set-item6^), no duplicates are allowed.</text>
+    </validate>
+    <validate type="error">
+      <condition logic="or">
+        <condition input="set-item6" empty="1"/>
+        <condition input="set-item7" empty="1"/>
+        <condition input="set-item6" value="^set-item7^" match="equal" logic="not"/>
+      </condition>
+      <text>You chose items with the same id (^set-item6^), no duplicates are allowed.</text>
+    </validate>
+
+    <validate type="error">
+      <condition logic="or">
+        <condition input="set-item6" empty="1"/>
+        <condition input="set-item2" empty="1"/>
+        <condition input="set-item6" value="^set-item2^" match="equal" logic="not"/>
+      </condition>
+      <text>You chose items with the same id (^set-item6^), no duplicates are allowed.</text>
+    </validate>
+    <validate type="error">
+      <condition logic="or">
+        <condition input="set-item6" empty="1"/>
+        <condition input="set-item7" empty="1"/>
+        <condition input="set-item6" value="^set-item7^" match="equal" logic="not"/>
+      </condition>
+      <text>You chose items with the same id (^set-item6^), no duplicates are allowed.</text>
+    </validate>
+
+    <!-- This is the validator that checks if enough dummy behaviors are on the unit to enable the set bonus behavior. -->
+    <entry catalog = "Validator" type = "CValidatorUnitCompareBehaviorCount">
+      <id>^set-item-id^_ItemSetValidator</id>
+      <condition id="condition-behavior-selected"/>
+      <field id="Behavior">
+        <value>^set-item-id^_ItemSetDummyBehavior</value>
+      </field>
+      <field id="Compare">
+        <value>Eq</value>
+      </field>
+      <field id="Value">
+        <value>^set-item-count^</value>
+      </field>
+      <field id="WhichUnit_Value">
+        <value>Source</value>
+      </field>
+    </entry>
+
+    <!-- This is the dummy behavior that stacks on the unit for every set item equipped. -->
+    <entry catalog = "Behavior" type = "CBehaviorBuff">
+      <id>^set-item-id^_ItemSetDummyBehavior</id>
+      <condition id="condition-behavior-selected"/>
+      <field id="InfoFlags">
+        <index>0</index>
+        <value>1</value>
+      </field>
+      <field id="MaxStackCount">
+        <value>^set-item-count^</value>
+      </field>
+    </entry>
+
+    <!-- This is the behavior that applies the set item bonus if all set items are equipped. -->
+    <entry catalog = "Behavior" type = "CBehavior">
+      <id>^set-item-behavior^</id>
+      <allowmodify/>
+      <condition id="condition-behavior-selected"/>
+      <field id="DisableValidatorArray">
+        <index>ref=Behavior,^set-item-behavior^,DisableValidatorArray#</index>
+        <value>^set-item-id^_ItemSetBonusValidator</value>
+      </field>
+    </entry>
+
+    <!-- Modify the existing items to add the dummy behavior to the equip behaviors. The actual bonus behavior is only applied by one item (item0).-->
+    <entry catalog = "Item" type = "CItem">
+      <id>^set-item0^</id>
+      <allowmodify/>
+      <condition logic="and">
+        <condition input="set-item0" empty="0"/>
+        <condition id="condition-behavior-selected"/>
+        <condition input="set-item-count" value ="1" operator="greaterequal"/>
+      </condition>
+      <field id="EquipBehaviorArray">
+        <index>ref=Item,^set-item0^,EquipBehaviorArray#</index>
+        <value>^set-item-behavior^</value>
+      </field>
+      <field id="EquipBehaviorArray">
+        <index>ref=Item,^set-item0^,EquipBehaviorArray#</index>
+        <value>^set-item-id^_ItemSetDummyBehavior</value>
+      </field>
+    </entry>
+    <entry catalog = "Item" type = "CItem">
+      <id>^set-item1^</id>
+      <allowmodify/>
+      <condition logic="and">
+        <condition input="set-item1" empty="0"/>
+        <condition id="condition-behavior-selected"/>
+        <condition input="set-item-count" value ="2" operator="greaterequal"/>
+      </condition>
+      <field id="EquipBehaviorArray">
+        <index>ref=Item,^set-item1^,EquipBehaviorArray#</index>
+        <value>^set-item-id^_ItemSetDummyBehavior</value>
+      </field>
+    </entry>
+    <entry catalog = "Item" type = "CItem">
+      <id>^set-item2^</id>
+      <allowmodify/>
+      <condition logic="and">
+        <condition input="set-item2" empty="0"/>
+        <condition id="condition-behavior-selected"/>
+        <condition input="set-item-count" value ="3" operator="greaterequal"/>
+      </condition>
+      <field id="EquipBehaviorArray">
+        <index>ref=Item,^set-item2^,EquipBehaviorArray#</index>
+        <value>^set-item-id^_ItemSetDummyBehavior</value>
+      </field>
+    </entry>
+    <entry catalog = "Item" type = "CItem">
+      <id>^set-item3^</id>
+      <allowmodify/>
+      <condition logic="and">
+        <condition input="set-item3" empty="0"/>
+        <condition id="condition-behavior-selected"/>
+        <condition input="set-item-count" value ="4" operator="greaterequal"/>
+      </condition>
+      <field id="EquipBehaviorArray">
+        <index>ref=Item,^set-item3^,EquipBehaviorArray#</index>
+        <value>^set-item-id^_ItemSetDummyBehavior</value>
+      </field>
+    </entry>
+    <entry catalog = "Item" type = "CItem">
+      <id>^set-item4^</id>
+      <allowmodify/>
+      <condition logic="and">
+        <condition input="set-item4" empty="0"/>
+        <condition id="condition-behavior-selected"/>
+        <condition input="set-item-count" value ="5" operator="greaterequal"/>
+      </condition>
+      <field id="EquipBehaviorArray">
+        <index>ref=Item,^set-item4^,EquipBehaviorArray#</index>
+        <value>^set-item-id^_ItemSetDummyBehavior</value>
+      </field>
+    </entry>
+    <entry catalog = "Item" type = "CItem">
+      <id>^set-item6^</id>
+      <allowmodify/>
+      <condition logic="and">
+        <condition input="set-item6" empty="0"/>
+        <condition id="condition-behavior-selected"/>
+        <condition input="set-item-count" value ="6" operator="greaterequal"/>
+      </condition>
+      <field id="EquipBehaviorArray">
+        <index>ref=Item,^set-item6^,EquipBehaviorArray#</index>
+        <value>^set-item-id^_ItemSetDummyBehavior</value>
+      </field>
+    </entry>
+    <entry catalog = "Item" type = "CItem">
+      <id>^set-item6^</id>
+      <allowmodify/>
+      <condition logic="and">
+        <condition input="set-item6" empty="0"/>
+        <condition id="condition-behavior-selected"/>
+        <condition input="set-item-count" value ="7" operator="greaterequal"/>
+      </condition>
+      <field id="EquipBehaviorArray">
+        <index>ref=Item,^set-item6^,EquipBehaviorArray#</index>
+        <value>^set-item-id^_ItemSetDummyBehavior</value>
+      </field>
+    </entry>
+    <entry catalog = "Item" type = "CItem">
+      <id>^set-item7^</id>
+      <allowmodify/>
+      <condition logic="and">
+        <condition input="set-item7" empty="0"/>
+        <condition id="condition-behavior-selected"/>
+        <condition input="set-item-count" value ="8" operator="greaterequal"/>
+      </condition>
+      <field id="EquipBehaviorArray">
+        <index>ref=Item,^set-item7^,EquipBehaviorArray#</index>
+        <value>^set-item-id^_ItemSetDummyBehavior</value>
+      </field>
+    </entry>
+
+    <macro id="set-introduction">&lt;n/&gt;Equipped &lt;d ref &#61;&#34;$BehaviorStackCount:^set-item-id^_ItemSetDummyBehavior$&#34;/&gt; of required &lt;d ref &#61;&#34;Validator,^set-item-id^_ItemSetValidator,Value&#34;/&gt; items. With all items equipped, the set grants:</macro>
+
+    <!-- Modify the existing item buttons using their tooltip appender if the appropriate option is selected.-->
+    <entry catalog = "Button" type = "CButton">
+      <id>^set-item0^</id>
+      <allowmodify/>
+      <condition logic="and">
+        <condition id="condition-behavior-selected"/>
+        <condition input="set-item0" empty="0"/>
+        <condition input="set-item-count" value ="1" operator="greaterequal"/>
+        <condition id="condition-set-item-update-button-option"/>
+      </condition>
+      <field id="TooltipAppender_Text">
+        <index>ref=Button,^set-item0^,TooltipAppender#</index>
+        <stringid>^set-item-id^_TooltipDescription</stringid>
+        <value>[^set-item-display-name^]: ^set-introduction^</value>
+      </field>
+      <field id="TooltipAppender_Face">
+        <index>ref=Button,^set-item0^,TooltipAppender#</index>
+        <stringid>Behavior/Name/^set-item-behavior^</stringid>
+        <value>ref=Behavior,^set-item-behavior^,Face</value>
+        <condition id="condition-set-item-tooltip-use-behavior-face"/>
+      </field>
+      <field id="TooltipAppender_Text">
+        <index>ref=Button,^set-item0^,TooltipAppender#</index>
+        <stringid>Set/Tooltip/^set-item-id^</stringid>
+        <value>^set-item-tooltip^</value>
+        <condition id="condition-set-item-tooltip-use-custom-tooltip"/>
+      </field>
+    </entry>
+    <entry catalog = "Button" type = "CButton">
+      <id>^set-item1^</id>
+      <allowmodify/>
+      <condition logic="and">
+        <condition id="condition-behavior-selected"/>
+        <condition input="set-item1" empty="0"/>
+        <condition input="set-item-count" value ="2" operator="greaterequal"/>
+        <condition id="condition-set-item-update-button-option"/>
+      </condition>
+      <field id="TooltipAppender_Text">
+        <index>ref=Button,^set-item1^,TooltipAppender#</index>
+        <stringid>^set-item-id^_TooltipDescription</stringid>
+        <value>[^set-item-display-name^]: ^set-introduction^</value>
+      </field>
+      <field id="TooltipAppender_Face">
+        <index>ref=Button,^set-item1^,TooltipAppender#</index>
+        <stringid>Behavior/Name/^set-item-behavior^</stringid>
+        <value>ref=Behavior,^set-item-behavior^,Face</value>
+        <condition id="condition-set-item-tooltip-use-behavior-face"/>
+      </field>
+      <field id="TooltipAppender_Text">
+        <index>ref=Button,^set-item1^,TooltipAppender#</index>
+        <stringid>Set/Tooltip/^set-item-id^</stringid>
+        <value>^set-item-tooltip^</value>
+        <condition id="condition-set-item-tooltip-use-custom-tooltip"/>
+      </field>
+    </entry>
+    <entry catalog = "Button" type = "CButton">
+      <id>^set-item2^</id>
+      <allowmodify/>
+      <condition logic="and">
+        <condition id="condition-behavior-selected"/>
+        <condition input="set-item2" empty="0"/>
+        <condition input="set-item-count" value ="3" operator="greaterequal"/>
+        <condition id="condition-set-item-update-button-option"/>
+      </condition>
+      <field id="TooltipAppender_Text">
+        <index>ref=Button,^set-item2^,TooltipAppender#</index>
+        <stringid>^set-item-id^_TooltipDescription</stringid>
+        <value>[^set-item-display-name^]: ^set-introduction^</value>
+      </field>
+      <field id="TooltipAppender_Face">
+        <index>ref=Button,^set-item2^,TooltipAppender#</index>
+        <stringid>Behavior/Name/^set-item-behavior^</stringid>
+        <value>ref=Behavior,^set-item-behavior^,Face</value>
+        <condition id="condition-set-item-tooltip-use-behavior-face"/>
+      </field>
+      <field id="TooltipAppender_Text">
+        <index>ref=Button,^set-item2^,TooltipAppender#</index>
+        <stringid>Set/Tooltip/^set-item-id^</stringid>
+        <value>^set-item-tooltip^</value>
+        <condition id="condition-set-item-tooltip-use-custom-tooltip"/>
+      </field>
+    </entry>
+    <entry catalog = "Button" type = "CButton">
+      <id>^set-item3^</id>
+      <allowmodify/>
+      <condition logic="and">
+        <condition id="condition-behavior-selected"/>
+        <condition input="set-item3" empty="0"/>
+        <condition input="set-item-count" value ="4" operator="greaterequal"/>
+        <condition id="condition-set-item-update-button-option"/>
+      </condition>
+      <field id="TooltipAppender_Text">
+        <index>ref=Button,^set-item3^,TooltipAppender#</index>
+        <stringid>^set-item-id^_TooltipDescription</stringid>
+        <value>[^set-item-display-name^]: ^set-introduction^</value>
+      </field>
+      <field id="TooltipAppender_Face">
+        <index>ref=Button,^set-item3^,TooltipAppender#</index>
+        <stringid>Behavior/Name/^set-item-behavior^</stringid>
+        <value>ref=Behavior,^set-item-behavior^,Face</value>
+        <condition id="condition-set-item-tooltip-use-behavior-face"/>
+      </field>
+      <field id="TooltipAppender_Text">
+        <index>ref=Button,^set-item3^,TooltipAppender#</index>
+        <stringid>Set/Tooltip/^set-item-id^</stringid>
+        <value>^set-item-tooltip^</value>
+        <condition id="condition-set-item-tooltip-use-custom-tooltip"/>
+      </field>
+    </entry>
+    <entry catalog = "Button" type = "CButton">
+      <id>^set-item4^</id>
+      <allowmodify/>
+      <condition logic="and">
+        <condition id="condition-behavior-selected"/>
+        <condition input="set-item4" empty="0"/>
+        <condition input="set-item-count" value ="5" operator="greaterequal"/>
+        <condition id="condition-set-item-update-button-option"/>
+      </condition>
+      <field id="TooltipAppender_Text">
+        <index>ref=Button,^set-item4^,TooltipAppender#</index>
+        <stringid>^set-item-id^_TooltipDescription</stringid>
+        <value>[^set-item-display-name^]: ^set-introduction^</value>
+      </field>
+      <field id="TooltipAppender_Face">
+        <index>ref=Button,^set-item4^,TooltipAppender#</index>
+        <stringid>Behavior/Name/^set-item-behavior^</stringid>
+        <value>ref=Behavior,^set-item-behavior^,Face</value>
+        <condition id="condition-set-item-tooltip-use-behavior-face"/>
+      </field>
+      <field id="TooltipAppender_Text">
+        <index>ref=Button,^set-item4^,TooltipAppender#</index>
+        <stringid>Set/Tooltip/^set-item-id^</stringid>
+        <value>^set-item-tooltip^</value>
+        <condition id="condition-set-item-tooltip-use-custom-tooltip"/>
+      </field>
+    </entry>
+    <entry catalog = "Button" type = "CButton">
+      <id>^set-item6^</id>
+      <allowmodify/>
+      <condition logic="and">
+        <condition id="condition-behavior-selected"/>
+        <condition input="set-item6" empty="0"/>
+        <condition input="set-item-count" value ="6" operator="greaterequal"/>
+        <condition id="condition-set-item-update-button-option"/>
+      </condition>
+      <field id="TooltipAppender_Text">
+        <index>ref=Button,^set-item6^,TooltipAppender#</index>
+        <stringid>^set-item-id^_TooltipDescription</stringid>
+        <value>[^set-item-display-name^]: ^set-introduction^</value>
+      </field>
+      <field id="TooltipAppender_Face">
+        <index>ref=Button,^set-item6^,TooltipAppender#</index>
+        <stringid>Behavior/Name/^set-item-behavior^</stringid>
+        <value>ref=Behavior,^set-item-behavior^,Face</value>
+        <condition id="condition-set-item-tooltip-use-behavior-face"/>
+      </field>
+      <field id="TooltipAppender_Text">
+        <index>ref=Button,^set-item6^,TooltipAppender#</index>
+        <stringid>Set/Tooltip/^set-item-id^</stringid>
+        <value>^set-item-tooltip^</value>
+        <condition id="condition-set-item-tooltip-use-custom-tooltip"/>
+      </field>
+    </entry>
+    <entry catalog = "Button" type = "CButton">
+      <id>^set-item6^</id>
+      <allowmodify/>
+      <condition logic="and">
+        <condition id="condition-behavior-selected"/>
+        <condition input="set-item6" empty="0"/>
+        <condition input="set-item-count" value ="7" operator="greaterequal"/>
+        <condition id="condition-set-item-update-button-option"/>
+      </condition>
+      <field id="TooltipAppender_Text">
+        <index>ref=Button,^set-item6^,TooltipAppender#</index>
+        <stringid>^set-item-id^_TooltipDescription</stringid>
+        <value>[^set-item-display-name^]: ^set-introduction^</value>
+      </field>
+      <field id="TooltipAppender_Face">
+        <index>ref=Button,^set-item6^,TooltipAppender#</index>
+        <stringid>Behavior/Name/^set-item-behavior^</stringid>
+        <value>ref=Behavior,^set-item-behavior^,Face</value>
+        <condition id="condition-set-item-tooltip-use-behavior-face"/>
+      </field>
+      <field id="TooltipAppender_Text">
+        <index>ref=Button,^set-item6^,TooltipAppender#</index>
+        <stringid>Set/Tooltip/^set-item-id^</stringid>
+        <value>^set-item-tooltip^</value>
+        <condition id="condition-set-item-tooltip-use-custom-tooltip"/>
+      </field>
+    </entry>
+    <entry catalog = "Button" type = "CButton">
+      <id>^set-item7^</id>
+      <allowmodify/>
+      <condition logic="and">
+        <condition id="condition-behavior-selected"/>
+        <condition input="set-item7" empty="0"/>
+        <condition input="set-item-count" value ="8" operator="greaterequal"/>
+        <condition id="condition-set-item-update-button-option"/>
+      </condition>
+      <field id="TooltipAppender_Text">
+        <index>ref=Button,^set-item7^,TooltipAppender#</index>
+        <stringid>^set-item-id^_TooltipDescription</stringid>
+        <value>[^set-item-display-name^]: ^set-introduction^</value>
+      </field>
+      <field id="TooltipAppender_Face">
+        <index>ref=Button,^set-item7^,TooltipAppender#</index>
+        <stringid>Behavior/Name/^set-item-behavior^</stringid>
+        <value>ref=Behavior,^set-item-behavior^,Face</value>
+        <condition id="condition-set-item-tooltip-use-behavior-face"/>
+      </field>
+      <field id="TooltipAppender_Text">
+        <index>ref=Button,^set-item7^,TooltipAppender#</index>
+        <stringid>Set/Tooltip/^set-item-id^</stringid>
+        <value>^set-item-tooltip^</value>
+        <condition id="condition-set-item-tooltip-use-custom-tooltip"/>
+      </field>
+    </entry>
+  </wizard>
+</wizardfile>

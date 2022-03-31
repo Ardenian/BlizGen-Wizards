@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wizardfile>
+  <wizard id = "ArdGenerateItemVariations">
+    <name>Generate Item Variations</name>
+    <instructions >
+    </instructions >
+    <objecttypes create = "Button; Item"/>
+    <category>Items</category>
+
+    <input id="item-base" type="CItemLink">
+      <name>Item Base</name>
+    </input>
+    
+    <input id="item-behavior-count-total" type="int16">
+      <name>Total Behaviors</name>
+      <tooltip>The behaviors that the wizard should generate item variations of.</tooltip>
+    </input>
+    <input id="item-behavior-count-single" type="int32">
+      <name>Total Behaviors Per Item</name>
+    </input>
+
+    <input id="test" type="int32">
+      <default value="2"/>
+    </input>
+
+    <macro id="base-index">(^ENTRYINDEX^ / ^item-behavior-count-total^)</macro>
+    <macro id="variation-index">^ENTRYINDEX^-((^ENTRYINDEX^/^item-behavior-count-total^)*^item-behavior-count-total^)</macro>
+    <macro id="item-count">^item-behavior-count-total^ * ^item-behavior-count-total^</macro>
+    <macro id="index">item^base-index^</macro>
+    
+    <entry catalog="Item" type="CItem">
+      <id>^ENTRYINDEX^_^base-index^_^variation-index^</id>
+      <parentid>^item-base^</parentid>
+      <count>^item-count^</count>
+    
+      <field id="EquipBehaviorArray">
+        <index>ref=Item,^item-base^,EquipBehaviorArray#</index>
+        <value>BehviorId</value>
+        <condition input="test" value="^ENTRYINDEX^" operator="equal"></condition>
+      </field>
+    </entry>
+  </wizard>
+</wizardfile>

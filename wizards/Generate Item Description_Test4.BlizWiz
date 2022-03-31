@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wizardfile>
+  <wizard id = "GenerateRPGItemDescription">
+    <name>RPG Item Description</name>
+    <objecttypes create = "Actor;Weapon;Unit;Model;Effect;Button;Item;Behavior"/>
+    <category>Generate</category>
+
+    <input id = "Item" type = "CItemLink">
+      <name>Item</name>
+    </input>
+
+    <input id = "ItemRarity" type = "WizardMenu">
+      <name>Rarity</name>
+      <item text = "Common" value = "Common"/>
+      <item text = "Rare" value = "Rare"/>
+      <item text = "Epic" value = "Epic"/>
+      <item text = "Legendary" value = "Legendary"/>
+    </input>
+
+    <input id = "ItemLore" type = "CStringLink">
+      <name>ItemLore</name>
+    </input>
+
+    <input id = "Button" type = "CButtonLink">
+      <name>Button</name>
+      <loadvalue>ref=Item,^Item^,Face</loadvalue>
+      <reloadfrom>Item</reloadfrom>
+    </input>
+
+    <input id = "EquipmentBehavior" type = "CBehaviorLink">
+      <name>EquipmentBehavior</name>
+      <reloadfrom>Item</reloadfrom>
+      <loadvalue>ref=Item,^Item^,EquipBehaviorArray[0]</loadvalue>
+    </input>
+
+    <input id="EquipBehaviorAttackSpeedMultiplier" type="real32">
+      <name>EquipBehaviorAttackSpeedMultiplier</name>
+      <reloadfrom>EquipmentBehavior</reloadfrom>
+      <loadvalue>ref=Behavior,^EquipmentBehavior^,Modification.AttackSpeedMultiplier</loadvalue>
+      <condition input="EquipmentBehavior" empty="0"/>
+      <nosave/>
+    </input>
+
+    <input id="EquipBehaviorCriticalAttackChanceMultiplier" type="real32">
+      <name>EquipBehaviorCriticalAttackChanceMultiplier</name>
+      <reloadfrom>EquipmentBehavior</reloadfrom>
+      <loadvalue>ref=Behavior,^EquipmentBehavior^,Modification.CriticalAttackChanceMultiplier</loadvalue>
+      <condition input="EquipmentBehavior" empty="0"/>
+      <nosave/>
+    </input>
+
+    <entry catalog = "Button" type = "CButton">
+      <id>^Button^</id>
+      <allowmodify/>
+      <condition input="Button" empty="0"></condition>
+
+      <field id ="TooltipAppender_Text">
+        <index>0</index>
+        <stringid>ItemRarityClassref=Button,^Button^,Name</stringid>
+        <value>(^ItemRarity^ ref=Item,^Item^,Class)&lt;n&gt;</value>
+      </field>
+
+      <field id ="TooltipAppender_Text">
+        <condition input="ItemLore" empty="0"></condition>
+        <index>1</index>
+        <stringid>ItemLoreref=Button,^Button^,Name</stringid>
+        <value>^ItemLore^&lt;n&gt;</value>
+      </field>
+
+      <field id ="TooltipAppender_Text">
+        <index>2</index>
+        <stringid>ItemEquipBonusAttackSpeedMultiplierref=Button,^Button^,Name</stringid>
+        <value>&lt;d ref &#61; &#34;Behavior,^EquipmentBehavior^,Modification.AttackSpeedMultiplier -1 * 100&#34; precision="2"/&gt;% Attack Speed Multiplier</value>
+        <condition logic="not">
+          <condition input="EquipBehaviorAttackSpeedMultiplier" value="ref=Behavior,CBehaviorBuff,Modification.AttackSpeedMultiplier" operator="equal"></condition>
+        </condition>
+      </field>
+
+      <field id ="TooltipAppender_Text">
+        <index>3</index>
+        <stringid>EquipBehaviorCriticalAttackChanceMultiplierref=Button,^Button^,Name</stringid>
+        <value>&lt;d ref &#61; &#34;Behavior,^EquipmentBehavior^,Modification.CriticalAttackChanceMultiplier -1 * 100&#34; precision="2"/&gt;% Critical Attack Chance Multiplier</value>
+        <condition logic="not">
+          <condition input="EquipBehaviorAttackSpeedMultiplier" value="ref=Behavior,CBehaviorBuff,Modification.CriticalAttackChanceMultiplier" operator="equal"/>
+        </condition>
+      </field>
+
+    </entry>
+
+  </wizard>
+</wizardfile>
